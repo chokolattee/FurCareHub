@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>Pet a' Pat</title>
+    <link rel="icon" href="images/pet3.png">
+    <style>
+        /* Grid container */
+        .box-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 50px;
+    justify-content: center;
+    padding: 20px;
+    max-width: 1300px; 
+    margin: auto;
+    margin-top: 30px;
+    
+
+}
+
+.box {
+    background-color: #f2c89cc7;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    width: 200px; 
+    max-width: 300px;
+    height: 250px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, background-color 0.3s;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+        .box:hover {
+            background-color: #efbb83be;
+            transform: scale(1.05);
+        }
+
+        .box img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .box .title {
+            font-size: 18px;
+            font-weight: bold;
+            color: brown;
+            margin-top: 10px;
+        }
+
+        .text a{
+            color: brown;
+            font-size: 50px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Responsive for smaller screens */
+        @media (max-width: 768px) {
+            .box-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .box-container {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+       
+        <div class="wrapper">
+            <div class="logo" data-aos="fade-right">
+                <img src="" alt="">
+            </div>
+            <div class="links">
+                <a href="home.html">HOME</a>
+                <a href="">CONTACT</a>
+                <a href="login.html">LOG IN</a>
+                <a href="">REGISTER</a>
+                <a href="">
+                    <i class="fa-solid fa-user fa-lg"></i> <!-- Profile icon -->
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Box Container -->
+    <div class="text">
+        <a>GROOMING SERVICES</a>
+    </div>
+    <div class="box-container">
+        <div class="box">
+            <img src="images/n.png" alt="Image 1">
+            <div class="title">Nail Cut</div>
+        </div>
+        <div class="box">
+            <img src="images/eye.png" alt="Image 2">
+            <div class="title">Eyes Clean</div>
+        </div>
+        <div class="box">
+            <img src="images/ears.png" alt="Image 3">
+            <div class="title">Ears Clean</div>
+        </div>
+        <div class="box">
+            <img src="images/paw.png" alt="Image 4">
+            <div class="title">Paw Hair Trim</div>
+        </div>
+        <div class="box">
+            <img src="images/teeth.png" alt="Image 5">
+            <div class="title">Teeth Cleaning</div>
+        </div>
+        <div class="box">
+            <img src="images/tail.png" alt="Image 6">
+            <div class="title">Tail Degrease</div>
+        </div>
+        <div class="box">
+            <img src="images/belly.png" alt="Image 7">
+            <div class="title">Belly and Anal Trim</div>
+        </div>
+        <div class="box">
+            <img src="images/body.png" alt="Image 8">
+            <div class="title">Full Body Shave</div>
+        </div>
+        <div class="box">
+            <img src="images/bath.png" alt="Image 9">
+            <div class="title">Medicinal Bath</div>
+        </div>
+        <div class="box">
+            <img src="images/anal.png" alt="Image 10">
+            <div class="title">Anal Sac Clean</div>
+        </div>
+        <div class="box">
+            <img src="images/dematting.png" alt="Image 11">
+            <div class="title">Hair Dematting</div>
+        </div>
+    </div>
+
+</body>
+
+</html>

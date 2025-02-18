@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>FurCareHub</title>
+    <link rel="icon" href="images/pet3.png">
+    <style>
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 70px;
+            justify-content: center;
+            align-items: center;
+            max-width: 1000px;
+            margin: auto;
+            margin-top: 20px;
+            padding: 20px;
+        }
+
+        .big-button {
+            width: 300px;
+            height: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: left;
+            background-color: #f2c89cc7;
+            border-radius: 15px;
+            text-decoration: none;
+            color:brown;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, background-color 0.3s;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .big-button:hover {
+            background-color:#efbb83be;
+            transform: scale(1.1);
+        }
+
+        .big-button img {
+            width: 250px;
+            height: 250px;
+           
+        }
+
+       
+
+        .big-button .text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .big-button .title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .big-button .description {
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .button-container {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="wrapper">
+            <div class="logo" data-aos="fade-right">
+                <img src="" alt="">
+            </div>
+            <div class="links">
+                <a href="index.html">HOME</a>
+                <a href="">CONTACT</a>
+                <a href="">LOG IN</a>
+                <a href="">REGISTER</a>
+                <a href="">
+                    <i class="fa-solid fa-user fa-lg"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="button-container">
+        <a href="service1.html" class="big-button">
+            <img src="images/service2.jpg" alt="Service 1">
+            <div class="text">
+                <div class="title">Luxury Package</div>
+               
+            </div>
+        </a>
+        <a href="service2.html" class="big-button">
+            <img src="images/service1.jpg" alt="Service 2">
+            <div class="text">
+                <div class="title">Premium Package</div>
+                
+            </div>
+        </a>
+
+         <a href="service3.html" class="big-button">
+            <img src="images/service3.jpg" alt="Service 3">
+            <div class="text">
+                <div class="title">Boarding</div>
+               
+            </div>
+        </a>
+        <a href="grooming.html" class="big-button">
+            <img src="images/service4.jpg" alt="Service 4">
+            <div class="text">
+                <div class="title">Grooming</div>
+               
+            </div>
+        </a>
+       
+    </div>
+</body>
+
+</html>
