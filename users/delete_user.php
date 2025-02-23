@@ -1,11 +1,9 @@
 <?php
 include('../includes/config.php');
 
-// Get the user ID and role from the URL
 $userId = $_GET['id'];
 $role = $_GET['role'];
 
-// Delete user based on their role
 if ($role == 'admin') {
     $query = "DELETE FROM admin WHERE admin_id = ?";
 } else {

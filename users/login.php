@@ -1,7 +1,5 @@
 <?php
-session_start(); // Start session
-
-// Include database connection
+session_start();
 include('../includes/config.php');
 
 $error = ""; // Initialize error message
@@ -64,10 +62,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../gui/style.css">
+    <link rel="stylesheet" href="../includes/style.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <title>Pet a' Pat - Login</title>
+    <title>FurCareHub - Login</title>
     <link rel="icon" href="images/pet3.png">
     <style>
         body {
@@ -137,7 +135,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     </style>
 </head>
-
+<nav>
+        <div class="wrapper">
+            <div class="logo" data-aos="fade-right">
+                <img src="" alt="">
+            </div>
+            <div class="links">
+                <a href="/FurCareHub/index.php">HOME</a>
+                <a href="">CONTACT</a>
+                <a href="/FurCareHub/users/login.php">LOG IN</a>
+                <a href="/FurCareHub/users/register.php">REGISTER</a>
+            </div>
+        </div>
+    </nav>
 <body>
     <div class="login-box">
         <h2>Login</h2>

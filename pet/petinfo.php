@@ -14,9 +14,6 @@ $result_type = $conn->query($query_type);
 $query_size = "SELECT * FROM size";
 $result_size = $conn->query($query_size);
 
-if ($result_type === false || $result_size === false) {
-    die("Error fetching pet types or sizes: " . $conn->error);
-}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = trim($_POST['pet-name']);
@@ -26,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $size_id = intval($_POST['pet-size']);
     $instructions = trim($_POST['pet-activity']);
 
-    $target_dir = "uploads/";
+    $target_dir = "../uploads/pet";
     $file_name = basename($_FILES["pet-image"]["name"]);
     $target_file = $target_dir . $file_name;
 
@@ -152,7 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
             <label for="pet-activity">Note:</label>
-            <input type="text" id="pet-activity" name="pet-activity" required>
+            <input type="text" id="pet-activity" name="pet-activity">
 
             <button type="submit">Submit</button>
         </form>

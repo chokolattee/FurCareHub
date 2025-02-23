@@ -1,5 +1,5 @@
 <?php
-session_start();
+include('includes/header.php');
 ?>
 
 
@@ -9,41 +9,12 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/FurCareHub/includes/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <title>FurCareHub</title>
     <link rel="icon" href="images/pet3.png">
 </head>
 <body>
-
-<nav>
-    <div class="logo">
-        <h2>FurCare Hub</h2>
-    </div>
-
-    <div class="links">
-        <?php if (isset($_SESSION['owner_id'])): ?>
-            <a href="">HOME</a>
-            <a href="">SERVICES</a>
-            <a href="">PRICING</a>
-            <a href="">CONTACT</a>
-            <a href="petinfo.php">PET INFO</a>
-        <?php else: ?>
-            <a href="">HOME</a>
-            <a href="">CONTACT</a>
-            <a href="/FurCareHub/users/login.php">Log In</a>
-            <a href="/FurCareHub/users/register.php">Register</a>
-        <?php endif; ?>
-    </div>
-
-    <div class="profile">
-        <?php if (isset($_SESSION['owner_id'])): ?>
-            <a href="profile.php">
-                <i class="fa-solid fa-user fa-lg"></i> <!-- Profile icon -->
-            </a>
-        <?php endif; ?>
-    </div>
-</nav>
 
 <section>
     <div class="content">

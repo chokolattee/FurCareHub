@@ -1,25 +1,57 @@
 <?php
-// Include database connection
-include('../includes/config.php'); 
+include('../includes/config.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $fullName = $_POST['full_name']; 
-    $contactNumber = $_POST['contact_number'];  
+    $fname = $_POST['fname'];
+    $mi = $_POST['m_i'];
+    $lname = $_POST['lname'];
+    $email = $_POST['email'];
+    $contactNumber = $_POST['contact_number'];
     $password = $_POST['password'];
     $confirmPassword = $_POST['confirm_password'];
 
+    // Check if passwords match
     if ($password != $confirmPassword) {
         echo "Passwords do not match!";
         exit();
     }
 
+    // Hash the password
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $sql = "INSERT INTO owner (name, email, contact, password) 
-                VALUES (?, ?, ?, ?)";
+    // Handle profile picture upload (optional)
+    $imgPath = null; // Default value if no image is uploaded
+    if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == 0) {
+        $targetDir = "../uploads/user/"; // Directory to store uploaded images
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0777, true); // Create the directory if it doesn't exist
+        }
+
+        $fileName = basename($_FILES['profile_picture']['name']);
+        $targetFilePath = $targetDir . $fileName;
+        $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
+
+        // Allow only certain file types (e.g., jpg, jpeg, png)
+        $allowedTypes = ['jpg', 'jpeg', 'png'];
+        if (in_array($fileType, $allowedTypes)) {
+            if (move_uploaded_file($_FILES['profile_picture']['tmp_name'], $targetFilePath)) {
+                $imgPath = 'uploads/user/' . $fileName; // Relative path for database
+            } else {
+                echo "Error uploading file.";
+                exit();
+            }
+        } else {
+            echo "Invalid file type. Only JPG, JPEG, and PNG are allowed.";
+            exit();
+        }
+    }
+
+    // Insert user data into the database
+    $sql = "INSERT INTO owner (fname, m_i, lname, email, contact, password, img_path) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
 
     if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("ssss", $fullName, $email, $contactNumber, $hashedPassword);
+        $stmt->bind_param("sssssss", $fname, $mi, $lname, $email, $contactNumber, $hashedPassword, $imgPath);
 
         if ($stmt->execute()) {
             header("Location: login.php");
@@ -43,10 +75,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../gui/style.css">
+    <link rel="stylesheet" href="../includes/style.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <title>Pet a' Pat - Register</title>
+    <title>FurCareHub- Register</title>
     <link rel="icon" href="images/pet3.png">
     <style>
         /* Resetting box-sizing for all elements */
@@ -143,13 +175,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <img src="" alt="">
             </div>
             <div class="links">
-                <a href="index.html">HOME</a>
+                <a href="/FurCareHub/index.php">HOME</a>
                 <a href="">CONTACT</a>
-                <a href="">LOG IN</a>
-                <a href="">REGISTER</a>
-                <a href="">
-                    <i class="fa-solid fa-user fa-lg"></i>
-                </a>
+                <a href="/FurCareHub/users/login.php">LOG IN</a>
+                <a href="/FurCareHub/users/register.php">REGISTER</a>
             </div>
         </div>
     </nav>
@@ -157,12 +186,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="register-box">
         <h2>Register</h2>
-        <form action="register.php" method="POST">
-            <input type="text" name="full_name" placeholder="Full Name" required>
+        <form action="register.php" method="POST" enctype="multipart/form-data">
+            <input type="text" name="fname" placeholder="First Name" required>
+            <input type="text" name="m_i" placeholder="Middle Initial">
+            <input type="text" name="lname" placeholder="Surname" required>
             <input type="email" name="email" placeholder="Email" required>
             <input type="tel" name="contact_number" placeholder="Contact Number" required>
             <input type="password" name="password" placeholder="Password" required>
             <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+            <input type="file" name="profile_picture" accept="image/jpeg, image/png, image/jpg">
             <button type="submit">Register</button>
         </form>
         <div class="login-link">
