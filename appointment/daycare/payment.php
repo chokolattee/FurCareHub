@@ -115,11 +115,51 @@ $cashless_payment_status = 1; // Pending for Cashless
     <title>Payment</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        .container { max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
+        .container {
+            background: #543306;
+            padding: 20px;
+            border-radius: 50px;
+            box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            max-height: 600px; 
+            height: 100%;
+            text-align: center; 
+            margin: 70px auto;
+            font-family: 'Darumadrop One', sans-serif;
+        }
         h2 { color: #333; }
         select, input, button { width: 100%; padding: 10px; margin-top: 10px; }
         .hidden { display: none; }
-        .cancel-button { background-color: #dc3545; color: white; }
+        .cancel-button { 
+            width: 100%;    
+            font-family: 'Darumadrop One', sans-serif;
+            background-color: #dc3545; 
+            color: white;
+        }
+        button {
+            margin-top: 30px;
+            padding: 10px;
+            width: 50%;
+            background-color: #f5efe0da;
+            color: #543306;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Darumadrop One', sans-serif;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px; 
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            flex: 2; 
+            padding: 12px;
+            border-radius: 20px;
+        }
     </style>
     <script>
         function toggleReferenceField() {
@@ -132,7 +172,7 @@ $cashless_payment_status = 1; // Pending for Cashless
 <body>
 
 <div class="container">
-    <h2>Payment Details</h2>
+    <br><h3>Payment Details</h3><br>
     
     <p><strong>Pet:</strong> <?php echo htmlspecialchars($appointment['pet_name']); ?></p>
     <p><strong>Owner:</strong> <?php echo htmlspecialchars($appointment['owner_name']); ?></p>
@@ -144,7 +184,7 @@ $cashless_payment_status = 1; // Pending for Cashless
     <?php if ($additional_hours > 0): ?>
     <p><strong>Additional Hours (₱100/hour):</strong> ₱<?php echo number_format($extra_charge, 2); ?></p>
 <?php endif; ?>
-    <p><strong>Appointment Rate (Including Additional Hours):</strong> ₱<?php echo number_format($appointment_rate_with_extra, 2); ?></p>
+    <p><strong>Appointment Rate :</strong> ₱<?php echo number_format($appointment_rate_with_extra, 2); ?></p>
     <p><strong>Total Service Cost:</strong> ₱<?php echo number_format($total_service_cost, 2); ?></p>
     <p><strong>Total Amount:</strong> ₱<?php echo number_format($total_amount, 2); ?></p>
 
@@ -160,7 +200,7 @@ $cashless_payment_status = 1; // Pending for Cashless
 
    <!-- Hidden input to check if the user is a member -->
 <input type="hidden" id="is_member" value="<?php echo $membership_id ? '1' : '0'; ?>">
-
+<br>
 <label for="payment_type">Select Payment Method:</label>
 <select name="payment_type" id="payment_type" required>
     <option value="1">Cash</option>
@@ -187,17 +227,16 @@ $cashless_payment_status = 1; // Pending for Cashless
     </div>
 </div>
 
+<div class="button-container">
+    <button type="submit" class="confirm-button">Confirm Payment</button>
+    </form>
 
-    <button type="submit">Confirm Payment</button>
-</form>
-
-
-    <!-- Cancel Appointment Form -->
     <form action="/FurCareHub/appointment/cancel_appointment.php" method="POST" onsubmit="return confirm('Are you sure you want to cancel this payment? This will delete your appointment.');">
         <input type="hidden" name="apt_id" value="<?php echo $apt_id; ?>">
         <button type="submit" class="cancel-button">Cancel Payment</button>
     </form>
 </div>
+
 
 <script src="/FurCareHub/includes/payment.js"></script>
 </body>

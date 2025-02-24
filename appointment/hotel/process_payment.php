@@ -36,58 +36,62 @@ if ($result->num_rows === 0) {
     exit();
 }
 
-// Fetch membership balance if user is a member
+// Default values
 $balance = 0.00;
-if ($membership_id) {
-    $query = "SELECT balance FROM membership WHERE membership_id = ? AND status_id = 11";
-    $stmt = $conn->prepare($query);
-    if (!$stmt) {
-        $_SESSION['error'] = "Database error: Failed to prepare the query.";
-        header("Location: /FurCareHub/appointment/hotel/payment.php");
-        exit();
-    }
-    $stmt->bind_param("i", $membership_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $membership = $result->fetch_assoc();
-    $stmt->close();
+$pmtstatus_id = 1; // Default: Pending verification
+$payment_img = "Not Required"; // Default value
 
-    if ($membership) {
-        $balance = floatval($membership['balance']);
-    }
-}
+// ** Process Cashless Payments (GCash or Membership Balance) **
+if ($payment_type == 2) {  
+    if ($cashless_choice === "balance" && $membership_id) {  
+        // Fetch membership balance
+        $query = "SELECT balance FROM membership WHERE membership_id = ? AND status_id = 11";
+        $stmt = $conn->prepare($query);
+        if (!$stmt) {
+            $_SESSION['error'] = "Database error: Failed to prepare the query.";
+            header("Location: /FurCareHub/appointment/hotel/payment.php");
+            exit();
+        }
+        $stmt->bind_param("i", $membership_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $membership = $result->fetch_assoc();
+        $stmt->close();
 
-// ** If user chooses "Deduct from Membership Balance" **
-if ($membership_id && $cashless_choice === "balance") {
-    if ($total_amount > $balance) {
-        $_SESSION['error'] = "Insufficient balance. Do you want to top up?";
-        $_SESSION['redirect_url'] = "/FurCareHub/users/member.php"; // Redirect for top-up
-        header("Location: /FurCareHub/appointment/hotel/payment.php");
-        exit();
-    }
+        if ($membership) {
+            $balance = floatval($membership['balance']);
+        }
 
-    // Deduct amount from balance
-    $new_balance = $balance - $total_amount;
-    $update_balance = "UPDATE membership SET balance = ? WHERE membership_id = ? AND status_id = 11";
-    $stmt = $conn->prepare($update_balance);
-    if (!$stmt) {
-        $_SESSION['error'] = "Database error: Failed to update membership balance.";
-        header("Location: /FurCareHub/appointment/hotel/payment.php");
-        exit();
-    }
-    $stmt->bind_param("di", $new_balance, $membership_id);
-    if (!$stmt->execute()) {
-        $_SESSION['error'] = "Failed to update membership balance.";
-        header("Location: /FurCareHub/appointment/hotel/payment.php");
-        exit();
-    }
-    $stmt->close();
+        if ($total_amount > $balance) {
+            $_SESSION['error'] = "Insufficient balance. Do you want to top up?";
+            $_SESSION['redirect_url'] = "/FurCareHub/users/member.php"; // Redirect for top-up
+            header("Location: /FurCareHub/appointment/hotel/payment.php");
+            exit();
+        }
 
-    $pmtstatus_id = 5; // Paid via membership balance
-    $payment_img = "Deducted from Membership Balance";
-    $reference_number = ""; // No reference number needed
-} elseif ($payment_type == 2) { // **GCash Payment**
-    if ($cashless_choice === "gcash") {
+        // Deduct from membership balance
+        $new_balance = $balance - $total_amount;
+        $update_balance = "UPDATE membership SET balance = ? WHERE membership_id = ? AND status_id = 11";
+        $stmt = $conn->prepare($update_balance);
+        if (!$stmt) {
+            $_SESSION['error'] = "Database error: Failed to update membership balance.";
+            header("Location: /FurCareHub/appointment/hotel/payment.php");
+            exit();
+        }
+        $stmt->bind_param("di", $new_balance, $membership_id);
+        if (!$stmt->execute()) {
+            $_SESSION['error'] = "Failed to update membership balance.";
+            header("Location: /FurCareHub/appointment/hotel/payment.php");
+            exit();
+        }
+        $stmt->close();
+
+        // Set payment details for balance deduction
+        $pmtstatus_id = 5; // Paid via membership balance
+        $payment_img = "Deducted from Membership Balance";
+        $reference_number = "";
+    } elseif ($cashless_choice === "gcash") {  
+        // **GCash Processing**
         if (empty($reference_number)) {
             $_SESSION['error'] = "Reference number is required for GCash payments.";
             header("Location: /FurCareHub/appointment/hotel/payment.php");
@@ -147,11 +151,15 @@ if ($membership_id && $cashless_choice === "balance") {
             header("Location: /FurCareHub/appointment/hotel/payment.php");
             exit();
         }
-        $pmtstatus_id = 1; // For Verification
+
+        // Set status to pending verification
+        $pmtstatus_id = 1; 
     }
-} else {
+} elseif ($payment_type == 1) {  
+    // **Cash Payment**
     $pmtstatus_id = 4; // Paid via cash
     $payment_img = "Cash (At the Counter)";
+    $reference_number = "";
 }
 
 // Insert payment record
@@ -168,13 +176,13 @@ $payment_for_id = 2; // 2 = Appointment
 
 $stmt->bind_param(
     "iisiiis",
-    $payment_for_id, // payment_for_id (2 = Appointment)
-    $payment_type,   // pmttype_id (1 = Cash, 2 = Cashless)
-    $reference_number, // reference_number (for cashless payments)
-    $membership_id,  // membership_id (if applicable)
-    $apt_id,         // apt_id (appointment ID)
-    $pmtstatus_id,   // Payment status
-    $payment_img    // payment_img (proof for cashless payments)
+    $payment_for_id,  
+    $payment_type,    
+    $reference_number, 
+    $membership_id,  
+    $apt_id,         
+    $pmtstatus_id,   
+    $payment_img    
 );
 
 // Execute the INSERT query

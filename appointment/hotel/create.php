@@ -20,6 +20,7 @@ $services = $conn->query("SELECT * FROM services");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/FurCareHub/includes/style.css">
     <title>Book Hotel Appointment</title>
     <style>
         body {
@@ -27,31 +28,51 @@ $services = $conn->query("SELECT * FROM services");
         }
         form {
             max-width: 400px;
+            width: 80%;
             margin: auto;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+
         label, select, input {
             display: block;
             width: 100%;
             margin-bottom: 10px;
         }
         button {
-            background-color: #28a745;
-            color: white;
+            margin-top: 30px;
             padding: 10px;
+            width: 50%;
+            background-color:  #28a745;
+            color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 20px;
             cursor: pointer;
+            font-family: 'Darumadrop One', sans-serif;
+        }
+        .container {
+            background: #543306;
+            padding: 20px;
+            border-radius: 50px;
+            box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
+            max-width: 1050px;
+            width: 100%;
+            max-height: 700px; 
+            height: 100%;
+            text-align: center; 
+            margin: 70px auto;
+            font-family: 'Darumadrop One', sans-serif;
+            display: flex;
         }
     </style>
 </head>
 <body>
 
-<h2>Book a Hotel Appointment</h2>
+<div class="container">
 
 <form action="" method="POST">
+<h2>Book a Hotel Appointment</h2><br>
     <label for="pet_id">Choose Pet:</label>
     <select name="pet_id" id="pet_id" required onchange="this.form.submit()">
         <option value="">Select a pet</option>
@@ -147,5 +168,6 @@ if (isset($_POST['pet_id']) && !empty($_POST['pet_id'])) {
 <?php 
 }
 ?>
+</div>
 </body>
 </html>

@@ -62,24 +62,22 @@ $services = $conn->query($services_query);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Additional Services</title>
+    <link rel="stylesheet" href="/FurCareHub/includes/style.css">
     <style>
-        /* General Styling */
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
 
         /* Container for form */
-        .container {
-            max-width: 450px;
-            margin: auto;
+        .container 
+        {
+            background: #543306;
             padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 50px;
+            box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            min-height: 200px; 
+            text-align: center; 
+            margin: 70px auto;
+            font-family: 'Darumadrop One', sans-serif;
         }
 
         /* Header */
@@ -91,15 +89,16 @@ $services = $conn->query($services_query);
 
         /* Form Styling */
         form {
-            text-align: left;
-            display: flex;
-            flex-direction: column;
+            max-width: 400px;
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
         /* Checkbox items */
         .service-item {
-            display: flex;
-            align-items: center;
             margin-bottom: 12px;
             padding: 8px;
             border-radius: 5px;
@@ -114,6 +113,12 @@ $services = $conn->query($services_query);
         input[type="checkbox"] {
             margin-right: 10px;
             transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .service-item label {
+            color: #543306; /* Change label color */
+            font-weight: bold;
             cursor: pointer;
         }
 
@@ -156,10 +161,11 @@ $services = $conn->query($services_query);
 
     </style>
 </head>
-<body>
+<div>
 
+<div class="form-container">
 <div class="container">
-    <h2>Select Additional Services</h2>
+<br><h3>Select Additional Services</h3><br><br>
     <form action="/FurCareHub/appointment/hotel/store.php" method="POST">
         <!-- Hidden fields to pass data to store.php -->
         <input type="hidden" name="pet_id" value="<?php echo $pet_id; ?>">
@@ -191,6 +197,7 @@ $services = $conn->query($services_query);
         <button type="submit" class="button-primary">Proceed to Payment</button>
         <button type="button" class="button-secondary" onclick="history.back();">Back</button>
     </form>
+</div>
 </div>
 
 </body>
