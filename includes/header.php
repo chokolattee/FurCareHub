@@ -32,7 +32,7 @@ session_start();
     nav {
         background-color: var(--primary);
         padding: 15px 50px;
-        display: flex;
+        display: fixed;
         justify-content: space-between;
         align-items: center;
     }
@@ -92,7 +92,6 @@ session_start();
     }
     </style>
 </head>
-
 <body>
     <nav>
         <div class="logo-container" data-aos="fade-right">
@@ -109,6 +108,7 @@ session_start();
             <?php if (isset($_SESSION['owner_id'])): ?>
                 <!-- Show only if owner is logged in -->
                 <a href="/FurCareHub/pet/petinfo.php">PET INFO</a>
+                <a href="/FurCareHub/users/membership.php">MEMBERSHIP</a>
             <?php else: ?>
                 <!-- Show only if owner is NOT logged in -->
                 <a href="/FurCareHub/users/login.php">LOG IN</a>
