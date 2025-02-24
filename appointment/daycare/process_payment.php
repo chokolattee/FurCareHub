@@ -13,7 +13,7 @@ if (!isset($_POST['apt_id'], $_POST['payment_type'])) {
 $apt_id = intval($_POST['apt_id']);
 $payment_type = intval($_POST['payment_type']); // 1 = Cash, 2 = Cashless
 $reference_number = isset($_POST['reference_number']) ? htmlspecialchars($_POST['reference_number']) : null;
-$membership_id = isset($_POST['membership_id']) ? intval($_POST['membership_id']) : null;
+$membership_id = isset($_POST['membership_id']) && !empty($_POST['membership_id']) ? intval($_POST['membership_id']) : null;
 $payment_img = 
 // Check if appointment exists
 $query = "SELECT * FROM appointment WHERE apt_id = ?";
@@ -39,6 +39,26 @@ $pmtstatus_id = ($payment_type == 1) ? 4 : 1; // Cash = Paid (4), Cashless = Pen
 $payment_img = null;
 
 if ($payment_type == 2) { // Cashless payment
+    if (empty($reference_number)) {
+        $_SESSION['error'] = "Reference number is required for cashless payments.";
+        header("Location: /FurCareHub/appointment/payment.php?apt_id=" . $apt_id);
+        exit();
+    }
+
+    // Check if reference number already exists (optional)
+    $check_reference = "SELECT * FROM payment WHERE reference_number = ?";
+    $stmt = $conn->prepare($check_reference);
+    $stmt->bind_param("s", $reference_number);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+
+    if ($result->num_rows > 0) {
+        $_SESSION['error'] = "Reference number already exists.";
+        header("Location: /FurCareHub/appointment/payment.php?apt_id=" . $apt_id);
+        exit();
+    }
+
     if (!isset($_FILES['payment_img']) || $_FILES['payment_img']['error'] != 0) {
         $_SESSION['error'] = "Please upload a valid payment proof.";
         header("Location: /FurCareHub/appointment/payment.php?apt_id=" . $apt_id);
