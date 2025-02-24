@@ -13,37 +13,61 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($email) || empty($password)) {
         $error = "All fields are required!";
     } else {
-        // Correct SQL statement with the actual table name
+        // Check the owner table first
         $sql = "SELECT * FROM owner WHERE email = ?";
-
         if ($stmt = $conn->prepare($sql)) {
             $stmt->bind_param("s", $email);
             $stmt->execute();
             $result = $stmt->get_result();
 
-            // If user exists
+            // If user exists in the owner table
             if ($result->num_rows == 1) {
                 $user = $result->fetch_assoc();
-                $role = $user['role']; // Fetch the role from the database
+                $role = 'owner'; // Set role to owner
 
                 // Verify password
                 if (password_verify($password, $user['password'])) {
                     // Set session variables
-                    $_SESSION['owner_id'] = $user['owner_id']; // Change to match your DB column
+                    $_SESSION['owner_id'] = $user['owner_id'];
                     $_SESSION['role'] = $role;
 
-                    // Redirect based on role
-                    if ($role === 'admin') {
-                        header("Location: admin_dashboard.php");
-                    } else {
-                        header("Location: ../index.php");
-                    }
+                    // Redirect to the appropriate page
+                    header("Location: ../index.php");
                     exit();
                 } else {
                     $error = "Incorrect password!";
                 }
             } else {
-                $error = "User not found!";
+                // If email is not found in the owner table, check the admin table
+                $sql = "SELECT * FROM admin WHERE email = ?";
+                if ($stmt = $conn->prepare($sql)) {
+                    $stmt->bind_param("s", $email);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+
+                    // If user exists in the admin table
+                    if ($result->num_rows == 1) {
+                        $user = $result->fetch_assoc();
+                        $role = 'admin'; // Set role to admin
+
+                        // Verify password
+                        if (password_verify($password, $user['password'])) {
+                            // Set session variables
+                            $_SESSION['admin_id'] = $user['admin_id'];
+                            $_SESSION['role'] = $role;
+
+                            // Redirect to the admin dashboard
+                            header("Location: /FurCareHub/admin/admin.php");
+                            exit();
+                        } else {
+                            $error = "Incorrect password!";
+                        }
+                    } else {
+                        $error = "User not found!";
+                    }
+                } else {
+                    $error = "Database error. Please try again later.";
+                }
             }
 
             $stmt->close();
