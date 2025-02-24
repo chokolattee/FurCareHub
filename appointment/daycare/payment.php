@@ -153,37 +153,52 @@ $cashless_payment_status = 1; // Pending for Cashless
     <p><strong>Discounted Total:</strong> ₱<?php echo number_format($discounted_total, 2); ?></p>
 <?php endif; ?>
 
-    <form action="process_payment.php" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="apt_id" value="<?php echo $apt_id; ?>">
-        <input type="hidden" name="membership_id" value="<?php echo $membership_id; ?>">
-        <input type="hidden" name="total_amount" value="<?php echo $membership_id ? $discounted_total : $total_amount; ?>">
+<form action="process_payment.php" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="apt_id" value="<?php echo $apt_id; ?>">
+    <input type="hidden" name="membership_id" value="<?php echo $membership_id; ?>">
+    <input type="hidden" name="total_amount" value="<?php echo $membership_id ? $discounted_total : $total_amount; ?>">
 
-        <label for="payment_type">Select Payment Method:</label>
-        <select name="payment_type" id="payment_type" required onchange="toggleReferenceField()">
-            <option value="1">Cash</option>
-            <option value="2">Cashless</option>
-        </select>
+   <!-- Hidden input to check if the user is a member -->
+<input type="hidden" id="is_member" value="<?php echo $membership_id ? '1' : '0'; ?>">
 
-        <?php if (!$membership_id): ?>
-            <!-- Show Reference Number and Payment Proof fields only if user does not have a membership ID -->
-            <div id="cashless-fields">
-                <label for="reference_number">Reference Number:</label>
-                <input type="text" name="reference_number" id="reference_number" required>
+<label for="payment_type">Select Payment Method:</label>
+<select name="payment_type" id="payment_type" required>
+    <option value="1">Cash</option>
+    <option value="2">Cashless</option>
+</select>
 
-                <label for="payment_img">Upload Payment Proof:</label>
-                <input type="file" name="payment_img" id="payment_img" accept="image/*">
-            </div>
+<!-- Cashless Payment Options -->
+<div id="cashless-options" class="hidden">
+    <label for="cashless_choice">Choose Payment Option:</label>
+    <select name="cashless_choice" id="cashless_choice">
+        <?php if ($membership_id): ?>
+            <option id="membership-option" value="balance">Deduct from Membership Balance</option>
         <?php endif; ?>
+        <option value="gcash">Pay via GCash</option>
+    </select>
 
-        <button type="submit">Confirm Payment</button>
-    </form>
+    <!-- GCash Payment Fields -->
+    <div id="gcash-fields" class="hidden">
+        <label for="reference_number">Reference Number:</label>
+        <input type="text" name="reference_number" id="reference_number">
+
+        <label for="payment_img">Upload Payment Proof:</label>
+        <input type="file" name="payment_img" id="payment_img" accept="image/*">
+    </div>
+</div>
+
+
+    <button type="submit">Confirm Payment</button>
+</form>
+
 
     <!-- Cancel Appointment Form -->
-    <form action="cancel_appointment.php" method="POST" onsubmit="return confirm('Are you sure you want to cancel this payment? This will delete your appointment.');">
+    <form action="/FurCareHub/appointment/cancel_appointment.php" method="POST" onsubmit="return confirm('Are you sure you want to cancel this payment? This will delete your appointment.');">
         <input type="hidden" name="apt_id" value="<?php echo $apt_id; ?>">
         <button type="submit" class="cancel-button">Cancel Payment</button>
     </form>
 </div>
 
+<script src="/FurCareHub/includes/payment.js"></script>
 </body>
 </html>
