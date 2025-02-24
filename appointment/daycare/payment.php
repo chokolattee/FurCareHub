@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../../includes/config.php');
+include('../../includes/alert.php');
 
 // Validate required fields
 if (!isset($_SESSION['apt_id'])) {
@@ -163,13 +164,16 @@ $cashless_payment_status = 1; // Pending for Cashless
             <option value="2">Cashless</option>
         </select>
 
-        <div id="cashless-fields" class="hidden">
-            <label for="reference_number">Reference Number:</label>
-            <input type="text" name="reference_number" id="reference_number">
+        <?php if (!$membership_id): ?>
+            <!-- Show Reference Number and Payment Proof fields only if user does not have a membership ID -->
+            <div id="cashless-fields">
+                <label for="reference_number">Reference Number:</label>
+                <input type="text" name="reference_number" id="reference_number" required>
 
-            <label for="payment_img">Upload Payment Proof:</label>
-            <input type="file" name="payment_img" id="payment_img" accept="image/*">
-        </div>
+                <label for="payment_img">Upload Payment Proof:</label>
+                <input type="file" name="payment_img" id="payment_img" accept="image/*">
+            </div>
+        <?php endif; ?>
 
         <button type="submit">Confirm Payment</button>
     </form>
