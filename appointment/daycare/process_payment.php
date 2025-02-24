@@ -43,7 +43,7 @@ if ($membership_id) {
     $stmt = $conn->prepare($query);
     if (!$stmt) {
         $_SESSION['error'] = "Database error: Failed to prepare the query.";
-        header("Location: /FurCareHub/appointment/hotel/payment.php");
+        header("Location: /FurCareHub/appointment/daycare/payment.php");
         exit();
     }
     $stmt->bind_param("i", $membership_id);
@@ -62,7 +62,7 @@ if ($membership_id && $cashless_choice === "balance") {
     if ($total_amount > $balance) {
         $_SESSION['error'] = "Insufficient balance. Do you want to top up?";
         $_SESSION['redirect_url'] = "/FurCareHub/users/member.php"; // Redirect for top-up
-        header("Location: /FurCareHub/appointment/hotel/payment.php");
+        header("Location: /FurCareHub/appointment/daycare/payment.php");
         exit();
     }
 
@@ -72,13 +72,13 @@ if ($membership_id && $cashless_choice === "balance") {
     $stmt = $conn->prepare($update_balance);
     if (!$stmt) {
         $_SESSION['error'] = "Database error: Failed to update membership balance.";
-        header("Location: /FurCareHub/appointment/hotel/payment.php");
+        header("Location: /FurCareHub/appointment/daycare/payment.php");
         exit();
     }
     $stmt->bind_param("di", $new_balance, $membership_id);
     if (!$stmt->execute()) {
         $_SESSION['error'] = "Failed to update membership balance.";
-        header("Location: /FurCareHub/appointment/hotel/payment.php");
+        header("Location: /FurCareHub/appointment/daycare/payment.php");
         exit();
     }
     $stmt->close();
@@ -90,7 +90,7 @@ if ($membership_id && $cashless_choice === "balance") {
     if ($cashless_choice === "gcash") {
         if (empty($reference_number)) {
             $_SESSION['error'] = "Reference number is required for GCash payments.";
-            header("Location: /FurCareHub/appointment/hotel/payment.php");
+            header("Location: /FurCareHub/appointment/daycare/payment.php");
             exit();
         }
 
@@ -104,14 +104,14 @@ if ($membership_id && $cashless_choice === "balance") {
 
         if ($result->num_rows > 0) {
             $_SESSION['error'] = "Reference number already exists.";
-            header("Location: /FurCareHub/appointment/hotel/payment.php");
+            header("Location: /FurCareHub/appointment/daycare/payment.php");
             exit();
         }
 
         // Validate payment image
         if (!isset($_FILES['payment_img']) || $_FILES['payment_img']['error'] != 0) {
             $_SESSION['error'] = "Please upload a valid payment proof.";
-            header("Location: /FurCareHub/appointment/hotel/payment.php");
+            header("Location: /FurCareHub/appointment/daycare/payment.php");
             exit();
         }
 
@@ -121,13 +121,13 @@ if ($membership_id && $cashless_choice === "balance") {
 
         if (!in_array($file_extension, $allowed_types)) {
             $_SESSION['error'] = "Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed.";
-            header("Location: /FurCareHub/appointment/hotel/payment.php");
+            header("Location: /FurCareHub/appointment/daycare/payment.php");
             exit();
         }
 
         if ($_FILES['payment_img']['size'] > 5 * 1024 * 1024) { // 5MB max
             $_SESSION['error'] = "File size exceeds the maximum limit of 5MB.";
-            header("Location: /FurCareHub/appointment/hotel/payment.php");
+            header("Location: /FurCareHub/appointment/daycare/payment.php");
             exit();
         }
 
@@ -144,7 +144,7 @@ if ($membership_id && $cashless_choice === "balance") {
             $payment_img = "/uploads/payment/" . $filename;
         } else {
             $_SESSION['error'] = "Failed to upload payment proof.";
-            header("Location: /FurCareHub/appointment/hotel/payment.php");
+            header("Location: /FurCareHub/appointment/daycare/payment.php");
             exit();
         }
         $pmtstatus_id = 1; // For Verification
@@ -160,7 +160,7 @@ $insert_payment = "INSERT INTO payment (payment_for_id, pmttype_id, reference_nu
 $stmt = $conn->prepare($insert_payment);
 if (!$stmt) {
     $_SESSION['error'] = "Database error: Failed to prepare the payment query.";
-    header("Location: /FurCareHub/appointment/daycare/hotel/payment.php");
+    header("Location: /FurCareHub/appointment/daycare/payment.php");
     exit();
 }
 

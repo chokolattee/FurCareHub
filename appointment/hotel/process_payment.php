@@ -5,7 +5,7 @@ include('../../includes/config.php');
 // Validate required fields
 if (!isset($_POST['apt_id'], $_POST['payment_type'])) {
     $_SESSION['error'] = "Invalid request. Missing required fields.";
-    header("Location: /FurCareHub/appointment/daycare/create.php");
+    header("Location: /FurCareHub/appointment/hotel/create.php");
     exit();
 }
 
@@ -22,7 +22,7 @@ $query = "SELECT * FROM appointment WHERE apt_id = ?";
 $stmt = $conn->prepare($query);
 if (!$stmt) {
     $_SESSION['error'] = "Database error: Failed to prepare the query.";
-    header("Location: /FurCareHub/appointment/daycare/create.php");
+    header("Location: /FurCareHub/appointment/hotel/create.php");
     exit();
 }
 $stmt->bind_param("i", $apt_id);
@@ -32,7 +32,7 @@ $stmt->close();
 
 if ($result->num_rows === 0) {
     $_SESSION['error'] = "Appointment not found.";
-    header("Location: /FurCareHub/appointment/daycare/create.php");
+    header("Location: /FurCareHub/appointment/hotel/create.php");
     exit();
 }
 
@@ -160,7 +160,7 @@ $insert_payment = "INSERT INTO payment (payment_for_id, pmttype_id, reference_nu
 $stmt = $conn->prepare($insert_payment);
 if (!$stmt) {
     $_SESSION['error'] = "Database error: Failed to prepare the payment query.";
-    header("Location: /FurCareHub/appointment/daycare/hotel/payment.php");
+    header("Location: /FurCareHub/appointment/hotel/payment.php");
     exit();
 }
 
